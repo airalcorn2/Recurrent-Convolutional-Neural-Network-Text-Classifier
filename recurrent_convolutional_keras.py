@@ -58,7 +58,7 @@ left_context_as_array = np.array([[MAX_TOKENS, 1, 2, 3]])
 # We shift the document to the left to obtain the right-side contexts.
 right_context_as_array = np.array([[2, 3, 4, MAX_TOKENS]])
 target = np.array([NUM_CLASSES * [0]])
-target(3) = 1
+target[0][3] = 1
 
 history = model.fit([doc_as_array, left_context_as_array, right_context_as_array], target, nb_epoch = 1, verbose = 0)
 loss = history.history["loss"][0]
