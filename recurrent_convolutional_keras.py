@@ -49,7 +49,7 @@ pool_rnn = Lambda(lambda x: x.max(axis = 1), output_shape = (hidden_dim_2, ))(se
 
 output = Dense(NUM_CLASSES, input_dim = hidden_dim_2, activation = "sigmoid")(pool_rnn) # See equations (6) and (7).
 
-model = Model(input = [document, left_context, right_context], output = prob)
+model = Model(input = [document, left_context, right_context], output = output)
 model.compile(optimizer = "adadelta", loss = "categorical_crossentropy", metrics = ["accuracy"])
 
 doc_as_array = np.array([[1, 2, 3, 4]])
