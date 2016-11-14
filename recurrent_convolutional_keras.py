@@ -6,11 +6,6 @@
 
 import gensim
 import numpy as np
-import random
-import socket
-import string
-import sys
-import time
 
 from keras.layers import Dense, Input, Lambda, merge, LSTM, TimeDistributed
 from keras.layers.embeddings import Embedding
