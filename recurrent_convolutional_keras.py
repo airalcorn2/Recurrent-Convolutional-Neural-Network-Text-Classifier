@@ -36,6 +36,7 @@ doc_embedding = embedder(document)
 l_embedding = embedder(left_context)
 r_embedding = embedder(right_context)
 
+# I use an LSTM instead of a vanilla RNN as described in the paper.
 forward = LSTM(hidden_dim_1, return_sequences = True)(l_embedding) # See equation (1).
 backward = LSTM(hidden_dim_1, return_sequences = True, go_backwards = True)(r_embedding) # See equation (2).
 together = merge([forward, doc_embedding, backward], mode = "concat", concat_axis = 2) # See equation (3).
