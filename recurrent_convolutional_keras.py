@@ -6,6 +6,7 @@
 
 import gensim
 import numpy as np
+import string
 
 from keras.layers import Dense, Input, Lambda, merge, LSTM, TimeDistributed
 from keras.layers.embeddings import Embedding
@@ -47,11 +48,17 @@ output = Dense(NUM_CLASSES, input_dim = hidden_dim_2, activation = "sigmoid")(po
 model = Model(input = [document, left_context, right_context], output = output)
 model.compile(optimizer = "adadelta", loss = "categorical_crossentropy", metrics = ["accuracy"])
 
-doc_as_array = np.array([[1, 2, 3, 4]])
+text = "This is some example text."
+text = text.strip().lower().translate(str.maketrans({key: " {0} ".format(key) for key in string.punctuation}))
+tokens = text.split()
+tokens = [word2vec.vocab[token].index if token in word2vec.vocab else MAX_TOKENS for token in tokens]
+
+doc_as_array = np.array([tokens])
 # We shift the document to the right to obtain the left-side contexts.
-left_context_as_array = np.array([[MAX_TOKENS, 1, 2, 3]])
+left_context_as_array = np.array([[MAX_TOKENS] + tokens[:-1]])
 # We shift the document to the left to obtain the right-side contexts.
-right_context_as_array = np.array([[2, 3, 4, MAX_TOKENS]])
+right_context_as_array = np.array([tokens[1:] + [MAX_TOKENS]])
+
 target = np.array([NUM_CLASSES * [0]])
 target[0][3] = 1
 
