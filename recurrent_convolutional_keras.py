@@ -41,7 +41,7 @@ semantic = TimeDistributed(Dense(hidden_dim_2, activation = "tanh"))(together) #
 
 # Keras provides its own max-pooling layers, but they cannot handle variable length input
 # (as far as I can tell). As a result, I define my own max-pooling layer here.
-pool_rnn = Lambda(lambda x: x.max(axis = 1), output_shape = (hidden_dim_2, ))(semantic) # See equation (5).
+pool_rnn = Lambda(lambda x: backend.max(x, axis = 1), output_shape = (hidden_dim_2, ))(semantic) # See equation (5).
 
 output = Dense(NUM_CLASSES, input_dim = hidden_dim_2, activation = "sigmoid")(pool_rnn) # See equations (6) and (7).
 
