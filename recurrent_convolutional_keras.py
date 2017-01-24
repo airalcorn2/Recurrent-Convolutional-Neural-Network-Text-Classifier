@@ -43,7 +43,7 @@ semantic = TimeDistributed(Dense(hidden_dim_2, activation = "tanh"))(together) #
 # (as far as I can tell). As a result, I define my own max-pooling layer here.
 pool_rnn = Lambda(lambda x: backend.max(x, axis = 1), output_shape = (hidden_dim_2, ))(semantic) # See equation (5).
 
-output = Dense(NUM_CLASSES, input_dim = hidden_dim_2, activation = "sigmoid")(pool_rnn) # See equations (6) and (7).
+output = Dense(NUM_CLASSES, input_dim = hidden_dim_2, activation = "softmax")(pool_rnn) # See equations (6) and (7).
 
 model = Model(input = [document, left_context, right_context], output = output)
 model.compile(optimizer = "adadelta", loss = "categorical_crossentropy", metrics = ["accuracy"])
