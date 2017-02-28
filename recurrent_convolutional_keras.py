@@ -8,6 +8,7 @@ import gensim
 import numpy as np
 import string
 
+from keras import backend
 from keras.layers import Dense, Input, Lambda, merge, LSTM, TimeDistributed
 from keras.layers.embeddings import Embedding
 from keras.models import Model
