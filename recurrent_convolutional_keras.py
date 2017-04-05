@@ -9,7 +9,8 @@ import numpy as np
 import string
 
 from keras import backend
-from keras.layers import Dense, Input, Lambda, merge, LSTM, TimeDistributed
+from keras.layers import Dense, Input, Lambda, LSTM, TimeDistributed
+from keras.layers.merge import concatenate
 from keras.layers.embeddings import Embedding
 from keras.models import Model
 
@@ -36,7 +37,7 @@ r_embedding = embedder(right_context)
 # I use LSTM RNNs instead of vanilla RNNs as described in the paper.
 forward = LSTM(hidden_dim_1, return_sequences = True)(l_embedding) # See equation (1).
 backward = LSTM(hidden_dim_1, return_sequences = True, go_backwards = True)(r_embedding) # See equation (2).
-together = merge([forward, doc_embedding, backward], mode = "concat", concat_axis = 2) # See equation (3).
+together = concatenate([forward, doc_embedding, backward], axis = 2) # See equation (3).
 
 semantic = TimeDistributed(Dense(hidden_dim_2, activation = "tanh"))(together) # See equation (4).
 
@@ -46,7 +47,7 @@ pool_rnn = Lambda(lambda x: backend.max(x, axis = 1), output_shape = (hidden_dim
 
 output = Dense(NUM_CLASSES, input_dim = hidden_dim_2, activation = "softmax")(pool_rnn) # See equations (6) and (7).
 
-model = Model(input = [document, left_context, right_context], output = output)
+model = Model(inputs = [document, left_context, right_context], outputs = output)
 model.compile(optimizer = "adadelta", loss = "categorical_crossentropy", metrics = ["accuracy"])
 
 text = "This is some example text."
@@ -63,5 +64,5 @@ right_context_as_array = np.array([tokens[1:] + [MAX_TOKENS]])
 target = np.array([NUM_CLASSES * [0]])
 target[0][3] = 1
 
-history = model.fit([doc_as_array, left_context_as_array, right_context_as_array], target, nb_epoch = 1, verbose = 0)
+history = model.fit([doc_as_array, left_context_as_array, right_context_as_array], target, epochs = 1, verbose = 0)
 loss = history.history["loss"][0]
