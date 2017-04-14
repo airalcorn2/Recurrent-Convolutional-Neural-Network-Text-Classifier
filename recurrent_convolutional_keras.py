@@ -1,5 +1,5 @@
 # Michael A. Alcorn (malcorn@redhat.com)
-# A (modified) implementation of the Recurrent Convolutional Neural Network (RCNN) found in [1].
+# A (slightly modified) implementation of the Recurrent Convolutional Neural Network (RCNN) found in [1].
 # [1] Siwei, L., Xu, L., Kang, L., and Zhao, J. 2015. Recurrent convolutional
 #         neural networks for text classification. In AAAI, pp. 2267-2273.
 #         http://www.aaai.org/ocs/index.php/AAAI/AAAI15/paper/view/9745
