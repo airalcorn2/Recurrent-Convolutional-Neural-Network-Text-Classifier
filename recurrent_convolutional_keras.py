@@ -37,6 +37,8 @@ r_embedding = embedder(right_context)
 # I use LSTM RNNs instead of vanilla RNNs as described in the paper.
 forward = LSTM(hidden_dim_1, return_sequences = True)(l_embedding) # See equation (1).
 backward = LSTM(hidden_dim_1, return_sequences = True, go_backwards = True)(r_embedding) # See equation (2).
+# Keras returns the output sequences in reverse order.
+backward = Lambda(lambda x: backend.reverse(x, axes = 1))(backward)
 together = concatenate([forward, doc_embedding, backward], axis = 2) # See equation (3).
 
 semantic = TimeDistributed(Dense(hidden_dim_2, activation = "tanh"))(together) # See equation (4).
