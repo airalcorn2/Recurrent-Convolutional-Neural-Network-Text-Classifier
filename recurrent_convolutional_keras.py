@@ -9,7 +9,7 @@ import numpy as np
 import string
 
 from keras import backend
-from keras.layers import Dense, Input, Lambda, LSTM, TimeDistributed
+from keras.layers import Conv1D, Dense, Input, Lambda, LSTM
 from keras.layers.merge import concatenate
 from keras.layers.embeddings import Embedding
 from keras.models import Model
@@ -41,7 +41,7 @@ backward = LSTM(hidden_dim_1, return_sequences = True, go_backwards = True)(r_em
 backward = Lambda(lambda x: backend.reverse(x, axes = 1))(backward)
 together = concatenate([forward, doc_embedding, backward], axis = 2) # See equation (3).
 
-semantic = TimeDistributed(Dense(hidden_dim_2, activation = "tanh"))(together) # See equation (4).
+semantic = Conv1D(hidden_dim_2, kernel_size = 1, activation = "tanh")(together) # See equation (4).
 
 # Keras provides its own max-pooling layers, but they cannot handle variable length input
 # (as far as I can tell). As a result, I define my own max-pooling layer here.
